@@ -71,7 +71,7 @@ activities = {
             "participants": []
         },
         "Science Club": {
-            "description": "Conduct experiments and explore scientific concepts",
+            "description": "ConductP experiments and explore scientific concepts",
             "schedule": "Wednesdays, 4:00 PM - 5:00 PM",
             "max_participants": 14,
             "participants": []
