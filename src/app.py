@@ -39,6 +39,43 @@ activities = {
         "max_participants": 30,
         "participants": ["john@mergington.edu", "olivia@mergington.edu"]
     }
+    ,
+        "Basketball Team": {
+            "description": "Join the school basketball team and compete in local leagues",
+            "schedule": "Mondays and Thursdays, 4:00 PM - 6:00 PM",
+            "max_participants": 15,
+            "participants": []
+        },
+        "Soccer Club": {
+            "description": "Practice soccer skills and play friendly matches",
+            "schedule": "Wednesdays, 3:30 PM - 5:30 PM",
+            "max_participants": 18,
+            "participants": []
+        },
+        "Art Club": {
+            "description": "Explore painting, drawing, and other visual arts",
+            "schedule": "Tuesdays, 3:30 PM - 5:00 PM",
+            "max_participants": 16,
+            "participants": []
+        },
+        "Drama Society": {
+            "description": "Participate in acting, stage production, and school plays",
+            "schedule": "Fridays, 4:00 PM - 6:00 PM",
+            "max_participants": 20,
+            "participants": []
+        },
+        "Mathletes": {
+            "description": "Compete in math competitions and solve challenging problems",
+            "schedule": "Thursdays, 3:30 PM - 4:30 PM",
+            "max_participants": 10,
+            "participants": []
+        },
+        "Science Club": {
+            "description": "Conduct experiments and explore scientific concepts",
+            "schedule": "Wednesdays, 4:00 PM - 5:00 PM",
+            "max_participants": 14,
+            "participants": []
+        }
 }
 
 
@@ -62,6 +99,32 @@ def signup_for_activity(activity_name: str, email: str):
     # Get the specificy activity
     activity = activities[activity_name]
 
+# Validate student is not already signed up 
+# and max participants not reached
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Already signed up for this activity")
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is full")
+    # Validate email format
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Invalid email format")                 
+    # Validate email domain
+    if not email.endswith("@mergington.edu"):
+        raise HTTPException(status_code=400, detail="Email must be a Mergington High School email")
+    # Validate email is not empty
+    if not email:
+        raise HTTPException(status_code=400, detail="Email cannot be empty")
+    # Validate email is not too long
+    if len(email) > 50:
+        raise HTTPException(status_code=400, detail="Email is too long")
+    # Validate email is not too short
+    if len(email) < 5:
+        raise HTTPException(status_code=400, detail="Email is too short")
+    # Validate email is not a duplicate
+    for activity in activities.values():
+        if email in activity["participants"]:
+            raise HTTPException(status_code=400, detail="Email is already signed up for another activity")      
+        
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
